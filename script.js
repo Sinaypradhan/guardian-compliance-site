@@ -15,7 +15,7 @@ navLinks.querySelectorAll('a').forEach((link) => {
   });
 });
 
-const API_BASE = 'https://fresh-veterinary-experiments-mechanism.trycloudflare.com';
+const API_BASE = 'https://spell-passenger-atlanta-mortgages.trycloudflare.com';
 
 const form = document.getElementById('contact-form');
 const status = document.getElementById('form-status');

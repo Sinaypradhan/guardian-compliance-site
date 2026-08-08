@@ -1,12 +1,10 @@
 @echo off
 cd /d "%~dp0"
 
-set MYSQLD="C:\Program Files\MySQL\MySQL Server 8.4\bin\mysqld.exe"
+echo Starting MySQL service (if not running)...
+sc.exe start MySQL84 2>nul
 
-echo Starting MySQL...
-start "Guardian MySQL" %MYSQLD% --datadir="C:\ProgramData\MySQL\MySQL Server 8.4\data" --console
-
-timeout /t 5 /nobreak >nul
+timeout /t 3 /nobreak >nul
 
 echo Starting backend...
 start "Guardian Backend" python backend\app.py
