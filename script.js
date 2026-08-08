@@ -15,10 +15,12 @@ navLinks.querySelectorAll('a').forEach((link) => {
   });
 });
 
+const API_BASE = 'https://fresh-veterinary-experiments-mechanism.trycloudflare.com';
+
 const form = document.getElementById('contact-form');
 const status = document.getElementById('form-status');
 
-form.addEventListener('submit', (event) => {
+form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const name = document.getElementById('name').value.trim();
@@ -35,8 +37,30 @@ form.addEventListener('submit', (event) => {
     return;
   }
 
-  showStatus('Thanks, ' + name + '! Your message was sent (demo).', 'success');
-  form.reset();
+  const submitBtn = form.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
+
+  try {
+    const res = await fetch(API_BASE + '/api/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Something went wrong.');
+    }
+
+    showStatus('Thanks, ' + name + '! Your message was sent.', 'success');
+    form.reset();
+  } catch (err) {
+    showStatus(err.message, 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send message';
+  }
 });
 
 function isValidEmail(email) {

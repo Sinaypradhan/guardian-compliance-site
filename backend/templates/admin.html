@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guardian — Admin · Messages</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: #0b0f19;
+      color: #e8ecf6;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+    .container { max-width: 860px; margin: 0 auto; }
+    h1 { margin-bottom: 0.3rem; }
+    .sub { color: #9aa3bd; margin-bottom: 2rem; }
+    .msg {
+      background: #161d33;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .msg .head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+    .msg .name { font-weight: 700; }
+    .msg .email { color: #6c7cff; }
+    .msg .time { color: #9aa3bd; font-size: 0.85rem; }
+    .msg .body { color: #c6cde0; white-space: pre-wrap; }
+    .empty { color: #9aa3bd; text-align: center; padding: 3rem 0; }
+    .back { color: #6c7cff; text-decoration: none; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a class="back" href="/">&larr; Back to site</a>
+    <h1>Messages</h1>
+    <p class="sub">{{ messages|length }} submission(s)</p>
+
+    {% if messages %}
+      {% for m in messages %}
+        <div class="msg">
+          <div class="head">
+            <span class="name">{{ m.name }}</span>
+            <a class="email" href="mailto:{{ m.email }}">{{ m.email }}</a>
+            <span class="time">{{ m.created_at }}</span>
+          </div>
+          <div class="body">{{ m.message }}</div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="empty">No messages yet. Submit the contact form on the site and it will appear here.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
