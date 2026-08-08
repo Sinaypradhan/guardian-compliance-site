@@ -1,13 +1,19 @@
 import os
-import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 
+import mysql.connector
 from flask import Flask, jsonify, request, render_template, g, send_from_directory
 
 BASE_DIR = Path(__file__).resolve().parent
 SITE_DIR = BASE_DIR.parent
-DB_PATH = BASE_DIR / "messages.db"
+
+DB_CONFIG = {
+    "host": os.environ.get("DB_HOST", "127.0.0.1"),
+    "user": os.environ.get("DB_USER", "root"),
+    "password": os.environ.get("DB_PASSWORD", "guardian123"),
+    "database": os.environ.get("DB_NAME", "guardian"),
+}
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
@@ -34,8 +40,8 @@ def add_cors_headers(resp):
 
 def get_db():
     if "db" not in g:
-        g.db = sqlite3.connect(DB_PATH)
-        g.db.row_factory = sqlite3.Row
+        g.db = mysql.connector.connect(**DB_CONFIG)
+        g.db.autocommit = False
     return g.db
 
 
@@ -47,19 +53,25 @@ def close_db(exc):
 
 
 def init_db():
-    db = sqlite3.connect(DB_PATH)
-    db.executescript(
+    db = mysql.connector.connect(
+        host=DB_CONFIG["host"],
+        user=DB_CONFIG["user"],
+        password=DB_CONFIG["password"],
+    )
+    cur = db.cursor()
+    cur.execute(
         """
-        CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL,
+        CREATE TABLE IF NOT EXISTS guardian.messages (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
             message TEXT NOT NULL,
-            created_at TEXT NOT NULL
-        );
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
         """
     )
     db.commit()
+    cur.close()
     db.close()
 
 
@@ -87,31 +99,40 @@ def create_message():
         return jsonify({"error": "Please enter a valid email address."}), 400
 
     db = get_db()
-    cur = db.execute(
-        "INSERT INTO messages (name, email, message, created_at) VALUES (?, ?, ?, ?)",
-        (name, email, message, datetime.now(timezone.utc).isoformat()),
+    cur = db.cursor()
+    cur.execute(
+        "INSERT INTO messages (name, email, message) VALUES (%s, %s, %s)",
+        (name, email, message),
     )
     db.commit()
+    new_id = cur.lastrowid
+    cur.close()
 
-    return jsonify({"ok": True, "id": cur.lastrowid}), 201
+    return jsonify({"ok": True, "id": new_id}), 201
 
 
 @app.route("/api/messages", methods=["GET"])
 def list_messages():
     db = get_db()
-    rows = db.execute(
+    cur = db.cursor(dictionary=True)
+    cur.execute(
         "SELECT id, name, email, message, created_at FROM messages ORDER BY id DESC"
-    ).fetchall()
-    return jsonify([dict(r) for r in rows])
+    )
+    rows = cur.fetchall()
+    cur.close()
+    return jsonify(rows)
 
 
 @app.route("/admin")
 def admin():
     db = get_db()
-    rows = db.execute(
+    cur = db.cursor(dictionary=True)
+    cur.execute(
         "SELECT id, name, email, message, created_at FROM messages ORDER BY id DESC"
-    ).fetchall()
-    return render_template("admin.html", messages=[dict(r) for r in rows])
+    )
+    rows = cur.fetchall()
+    cur.close()
+    return render_template("admin.html", messages=rows)
 
 
 if __name__ == "__main__":
