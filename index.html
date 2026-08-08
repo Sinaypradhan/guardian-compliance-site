@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guardian — Knowledge & Compliance Agent</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container">
+      <a href="#" class="brand">Guardian</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-content">
+        <p class="eyebrow">AI · Knowledge · Compliance</p>
+        <h1>Your always-on compliance agent.</h1>
+        <p class="subtitle">Guardian ingests your policies and regulations, answers knowledge questions instantly, and flags compliance risks before they become problems.</p>
+        <div class="hero-actions">
+          <a href="#pricing" class="btn btn-primary">Get started free</a>
+          <a href="#features" class="btn btn-ghost">Learn more</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features container">
+      <h2>Everything you need</h2>
+      <p class="section-sub">Stay compliant without the busywork.</p>
+      <div class="feature-grid">
+        <article class="card">
+          <div class="icon">📚</div>
+          <h3>Knowledge hub</h3>
+          <p>Search policies, regulations, and standards in plain language with instant, cited answers.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🛡️</div>
+          <h3>Risk detection</h3>
+          <p>Continuously scan processes and documents for gaps against your compliance framework.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🧾</div>
+          <h3>Audit-ready trail</h3>
+          <p>Every question and alert is logged with timestamps, sources, and evidence for auditors.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="pricing" class="pricing container">
+      <h2>Simple pricing</h2>
+      <p class="section-sub">Start free. Scale with your organization.</p>
+      <div class="pricing-grid">
+        <article class="card">
+          <h3>Team</h3>
+          <p class="price">$0</p>
+          <ul>
+            <li>1 workspace</li>
+            <li>50 knowledge questions / mo</li>
+            <li>Basic risk alerts</li>
+            <li>Community support</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost btn-block">Start free</a>
+        </article>
+        <article class="card featured">
+          <span class="badge">Popular</span>
+          <h3>Enterprise</h3>
+          <p class="price">$299<span>/mo</span></p>
+          <ul>
+            <li>Unlimited workspaces</li>
+            <li>Unlimited questions</li>
+            <li>Full audit trail & evidence</li>
+            <li>Priority support & onboarding</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary btn-block">Talk to sales</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="contact container">
+      <h2>Get in touch</h2>
+      <form id="contact-form" class="contact-form" novalidate>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Ada Lovelace" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="ada@example.com" required>
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" placeholder="Tell us about your compliance needs..." required></textarea>
+
+        <p id="form-status" class="form-status" role="status" hidden></p>
+
+        <button type="submit" class="btn btn-primary">Send message</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Guardian. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
